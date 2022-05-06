@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity() {
                 )
             this.tasksList.add(task)
             this.taskDataAdapter.notifyItemInserted(this.tasksList.size-1)
+            this.rvTaskData.scrollToPosition(this.tasksList.size-1)
+            this.swtUrgent.isChecked = false
             this.etxtDescription.text.clear()
 
         }
