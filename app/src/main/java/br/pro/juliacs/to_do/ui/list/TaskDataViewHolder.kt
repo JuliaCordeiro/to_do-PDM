@@ -11,12 +11,20 @@ import br.pro.juliacs.to_do.R
 import br.pro.juliacs.to_do.models.TaskData
 
 class TaskDataViewHolder(
-    itemView: View
+    itemView: View,
+    private val adapter: TaskDataAdapter
 ) : RecyclerView.ViewHolder(itemView) {
     private val txtDescription: TextView = itemView.findViewById(R.id.txtDescription)
     private val tagUrgent: FrameLayout = itemView.findViewById(R.id.tagUrgent)
     private val cbxDone: CheckBox = itemView.findViewById(R.id.cbxDone)
     private lateinit var currentTaskData: TaskData
+
+    init {
+        itemView.setOnClickListener {
+            this.adapter.getOnDoneCheckListener()?.onDoneCheck(this.currentTaskData)
+        }
+    }
+
     fun bind(taskData: TaskData) {
         this.currentTaskData = taskData
         if(this.currentTaskData.isUrgent) {

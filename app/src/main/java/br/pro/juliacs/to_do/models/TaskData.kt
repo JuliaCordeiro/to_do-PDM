@@ -6,7 +6,7 @@ import android.os.Parcelable
 class TaskData (
     val description: String,
     val isUrgent: Boolean,
-    val isDone: Boolean
+    var isDone: Boolean
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
