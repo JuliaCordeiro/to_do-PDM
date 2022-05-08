@@ -1,6 +1,5 @@
 package br.pro.juliacs.to_do.ui.list
 
-import android.content.Context
 import android.view.View
 import android.widget.CheckBox
 import android.widget.FrameLayout
@@ -11,19 +10,12 @@ import br.pro.juliacs.to_do.R
 import br.pro.juliacs.to_do.models.TaskData
 
 class TaskDataViewHolder(
-    itemView: View,
-    private val adapter: TaskDataAdapter
+    itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
     private val txtDescription: TextView = itemView.findViewById(R.id.txtDescription)
     private val tagUrgent: FrameLayout = itemView.findViewById(R.id.tagUrgent)
     private val cbxDone: CheckBox = itemView.findViewById(R.id.cbxDone)
     private lateinit var currentTaskData: TaskData
-
-    init {
-        itemView.setOnClickListener {
-            this.adapter.getOnDoneCheckListener()?.onDoneCheck(this.currentTaskData)
-        }
-    }
 
     fun bind(taskData: TaskData) {
         this.currentTaskData = taskData

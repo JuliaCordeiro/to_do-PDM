@@ -3,10 +3,8 @@ package br.pro.juliacs.to_do
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Switch
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.pro.juliacs.to_do.models.TaskData
@@ -33,9 +31,6 @@ class MainActivity : AppCompatActivity() {
                 as ArrayList<TaskData>
         }
         this.taskDataAdapter = TaskDataAdapter(this.tasksList)
-        this.taskDataAdapter.setOnDoneCheckListener { task ->
-            Toast.makeText(this, task.isDone.toString(), Toast.LENGTH_SHORT).show()
-        }
         this.rvTaskData.layoutManager = LinearLayoutManager(this)
         this.rvTaskData.adapter = this.taskDataAdapter
     }
@@ -61,5 +56,4 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 }
