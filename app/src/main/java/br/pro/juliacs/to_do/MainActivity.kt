@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Switch
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.pro.juliacs.to_do.models.TaskData
@@ -31,6 +32,12 @@ class MainActivity : AppCompatActivity() {
                 as ArrayList<TaskData>
         }
         this.taskDataAdapter = TaskDataAdapter(this.tasksList)
+
+        this.taskDataAdapter.setOnIsDoneListener { taskData, value ->
+            taskData.isDone = value
+            if(value) Toast.makeText(this, taskData.description + " -> Concluída!", Toast.LENGTH_LONG).show()
+        }
+
         this.rvTaskData.layoutManager = LinearLayoutManager(this)
         this.rvTaskData.adapter = this.taskDataAdapter
     }
