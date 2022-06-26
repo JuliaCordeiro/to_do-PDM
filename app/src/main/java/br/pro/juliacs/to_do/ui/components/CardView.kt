@@ -24,8 +24,7 @@ fun CardView(taskData: TaskData) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 2.dp),
-        backgroundColor = white
+            .padding(vertical = 5.dp)
     ) {
         Row( modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min) ) {
             TaskUrgentFlag(
@@ -38,7 +37,7 @@ fun CardView(taskData: TaskData) {
             Checkbox(
                 checked = done.value,
                 onCheckedChange = { done.value = it },
-                Modifier.align(Alignment.CenterVertically).padding(end = 2.dp)
+                Modifier.align(Alignment.CenterVertically).padding(end = 10.dp)
             )
         }
     }
@@ -62,7 +61,7 @@ fun TaskUrgentFlag(taskData: TaskData, modifier: Modifier = Modifier) {
 @Composable
 fun TaskInfo(taskData: TaskData, modifier: Modifier = Modifier) {
     Column (
-        modifier = modifier.padding(vertical = 2.dp, horizontal = 5.dp)
+        modifier = modifier.padding(vertical = 10.dp, horizontal = 5.dp)
     ) {
         Text(
             text = taskData.description,

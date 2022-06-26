@@ -16,9 +16,9 @@ class TaskRequest(context: Context) {
     private val queue = Volley.newRequestQueue(context)
 
     companion object {
-        private const val URL = "http://0.0.0.0"
+        private const val URL = "http://10.0.2.2:8000"
         private const val GET_TASKS = "/tasks"
-        private const val CREATE_TASK = "/task/new"
+        private const val CREATE_TASK = "/tasks/new"
     }
 
     fun startTasksRequest() {
@@ -51,13 +51,13 @@ class TaskRequest(context: Context) {
     private fun jsonArrayToTaskList(jsonArray: JSONArray): ArrayList<TaskData> {
         val taskList = ArrayList<TaskData>()
 
-        for(i in 0 until jsonArray.length()) {
+        for(i in 0..(jsonArray.length() - 1)) {
             val jsonObject = jsonArray.getJSONObject(i)
             val task = TaskData(
                 jsonObject.getLong("id"),
                 jsonObject.getString("description"),
-                jsonObject.getBoolean("isUrgent"),
-                jsonObject.getBoolean("isDone")
+                jsonObject.getBoolean("is_urgent"),
+                jsonObject.getBoolean("is_done")
             )
             taskList.add(task)
         }
@@ -72,10 +72,10 @@ class TaskRequest(context: Context) {
             this.taskToJSONObject(taskData),
             { response ->
                 Log.d("ReqCreateRes", response.toString())
-                tasksRequest(callback)
+                this.tasksRequest(callback)
             },
             { error ->
-                Log.e("ReqCreateError", "Connection error. $error.toString()")
+                Log.e("ReqCreateError", "Connection error. ${error.toString()}")
             }
         )
         this.queue.add(jsonObjectRequest)
@@ -84,8 +84,8 @@ class TaskRequest(context: Context) {
     private fun taskToJSONObject(taskData: TaskData): JSONObject {
         val jsonObject = JSONObject()
         jsonObject.put("description", taskData.description)
-        jsonObject.put("isUrgent", taskData.isUrgent)
-        jsonObject.put("isDone", taskData.isDone)
+        jsonObject.put("is_urgent", taskData.isUrgent)
+        jsonObject.put("is_done", taskData.isDone)
 
         return jsonObject
     }
