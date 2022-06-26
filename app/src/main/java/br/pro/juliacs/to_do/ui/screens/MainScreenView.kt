@@ -1,7 +1,7 @@
 package br.pro.juliacs.to_do.ui.screens
 
+import br.pro.juliacs.to_do.models.CallBack
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
@@ -12,11 +12,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.pro.juliacs.to_do.data.*
+import br.pro.juliacs.to_do.models.TaskData
 import br.pro.juliacs.to_do.ui.components.CardView
 import br.pro.juliacs.to_do.ui.theme.ToDoAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreenView( /*taskRequest: TaskRequest*/ ) {
+fun MainScreenView( taskRequest: TaskRequest ) {
     var newTaskDescription = remember { mutableStateOf(TextFieldValue("")) }
     var isUrgent = remember { mutableStateOf(false) }
     val stateTasksList = rememberLazyListState()
@@ -58,10 +60,20 @@ fun MainScreenView( /*taskRequest: TaskRequest*/ ) {
                     Button(
                         onClick = {
                             Log.d("Button", "click")
-                            // TODO
-                            /*
-                            REQUEST TO INSERT NEW TASKS
-                            */
+                            taskRequest.createNewTask(
+                                TaskData(
+                                    0,
+                                    newTaskDescription.value.text,
+                                    isUrgent.value
+                                ),
+                                object : CallBack {
+                                    override fun onSuccess() {
+                                        coroutineScope.launch {
+                                            stateTasksList.animateScrollToItem(TasksSingleton.getTasks().size)
+                                        }
+                                    }
+                                }
+                            )
                             newTaskDescription.value = TextFieldValue("")
                         },
                         Modifier
@@ -87,18 +99,18 @@ fun MainScreenView( /*taskRequest: TaskRequest*/ ) {
     }
 }
 
-@Preview
-@Composable
-fun PreviewMainScreenViewDark() {
-    ToDoAppTheme(darkTheme = true) {
-        MainScreenView()
-    }
-}
-
-@Preview
-@Composable
-fun PreviewMainScreenView() {
-    ToDoAppTheme(darkTheme = false) {
-        MainScreenView()
-    }
-}
+//@Preview
+//@Composable
+//fun PreviewMainScreenViewDark() {
+//    ToDoAppTheme(darkTheme = true) {
+//        MainScreenView()
+//    }
+//}
+//
+//@Preview
+//@Composable
+//fun PreviewMainScreenView() {
+//    ToDoAppTheme(darkTheme = false) {
+//        MainScreenView()
+//    }
+//}

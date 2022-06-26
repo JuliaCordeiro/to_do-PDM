@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ToDoAppTheme {
                 this.SetupUIConfigs()
-                MainScreenView()
+                MainScreenView(taskRequest)
             }
         }
     }
