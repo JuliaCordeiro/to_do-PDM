@@ -55,8 +55,16 @@ fun MainScreenView( taskRequest: TaskRequest ) {
                         value = newTaskDescription.value,
                         onValueChange = { newDescription -> newTaskDescription.value = newDescription},
                         placeholder = { Text( "Type the task description ") },
-                        modifier = Modifier.padding(10.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .fillMaxWidth()
+                            .padding(10.dp)
                     )
+                }
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                ) {
                     Button(
                         onClick = {
                             Log.d("Button", "click")
@@ -78,8 +86,8 @@ fun MainScreenView( taskRequest: TaskRequest ) {
                         },
                         Modifier
                             .align(Alignment.CenterVertically)
-                            .width(80.dp)
-                            .padding(10.dp)
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, end = 10.dp, bottom = 20.dp)
                     ) {
                         Text( "OK" )
                     }
@@ -106,7 +114,7 @@ fun MainScreenView( taskRequest: TaskRequest ) {
 //        MainScreenView()
 //    }
 //}
-//
+
 //@Preview
 //@Composable
 //fun PreviewMainScreenView() {
