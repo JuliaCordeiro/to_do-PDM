@@ -83,6 +83,7 @@ fun MainScreenView( taskRequest: TaskRequest ) {
                                 }
                             )
                             newTaskDescription.value = TextFieldValue("")
+                            isUrgent.value = false
                         },
                         Modifier
                             .align(Alignment.CenterVertically)
