@@ -1,14 +1,14 @@
 package br.pro.juliacs.to_do.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.pro.juliacs.to_do.data.TaskRequest
@@ -17,6 +17,10 @@ import br.pro.juliacs.to_do.ui.theme.*
 
 @Composable
 fun CardView(taskData: TaskData, taskRequest: TaskRequest?) {
+    var visibleState = remember {
+        mutableStateOf(false)
+    }
+    
     var done by remember {
         mutableStateOf(false)
     }
@@ -27,8 +31,17 @@ fun CardView(taskData: TaskData, taskRequest: TaskRequest?) {
             .fillMaxWidth()
             .padding(vertical = 5.dp)
     ) {
+        ShowAlertDialog(taskData, taskRequest, visibleState)
         Row( modifier = Modifier
-            .height(intrinsicSize = IntrinsicSize.Min) ) {
+            .height(intrinsicSize = IntrinsicSize.Min)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        visibleState.value = true
+                    }
+                )
+            }
+        ) {
             TaskUrgentFlag(
                 taskData)
             TaskInfo(
@@ -67,7 +80,6 @@ fun TaskUrgentFlag(taskData: TaskData, modifier: Modifier = Modifier) {
                 .background(flagColor)
                 .fillMaxHeight())
     }
-
 }
 
 @Composable
@@ -78,6 +90,50 @@ fun TaskInfo(taskData: TaskData, modifier: Modifier = Modifier) {
         Text(
             text = taskData.description,
             style = Typography.body1
+        )
+    }
+}
+
+@Composable
+fun ShowAlertDialog(taskData: TaskData, taskRequest: TaskRequest?, visibility: MutableState<Boolean>) {
+    if(visibility.value) {
+        AlertDialog(
+            onDismissRequest = { visibility.value = false },
+            dismissButton = {
+                TextButton(
+                    onClick = { visibility.value = false }
+                ) {
+                    Text(
+                        text = "Cancel",
+                        color = mediumBlue
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        visibility.value = false
+                        taskRequest?.deleteTaskData(taskData)
+                    }
+                ) {
+                    Text(
+                        text = "OK",
+                        color = mediumBlue
+                    )
+                }
+            },
+            title = {
+                Text(
+                    text ="Task Delete",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "Are you sure?",
+                    fontWeight = FontWeight.Medium
+                )
+            }
         )
     }
 }

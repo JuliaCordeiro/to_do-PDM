@@ -20,6 +20,7 @@ class TaskRequest(context: Context) {
         private const val GET_TASKS = "/tasks/"
         private const val CREATE_TASK = "/tasks/new"
         private const val UPDATE_TASK = "/tasks/done"
+        private const val DELETE_TASK = "/tasks/del"
     }
 
 
@@ -65,6 +66,25 @@ class TaskRequest(context: Context) {
             },
             { error ->
                 Log.e("ReqUpdateError", "Connection error. ${error.toString()}")
+            }
+        )
+        this.queue.add(jsonObjectRequest)
+    }
+
+
+    fun deleteTaskData(taskData: TaskData) {
+        Log.d("ReqDeleteStatus", "Starting")
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.DELETE,
+            URL + DELETE_TASK + "/${taskData.id}",
+            this.taskToJSONObject(taskData),
+            { response ->
+                Log.d("ReqDeleteRes", response.toString())
+                this.tasksRequest(null)
+            },
+            { error ->
+                Log.e("ReqDeleteError", "Connection error. ${error.toString()}")
             }
         )
         this.queue.add(jsonObjectRequest)

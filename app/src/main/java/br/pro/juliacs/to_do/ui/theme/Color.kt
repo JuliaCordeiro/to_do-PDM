@@ -7,6 +7,7 @@ val normalCian = Color(0xFF2ADDC6)
 val white = Color(0xFFFFFFFF)
 val black = Color(0xFF000000)
 val lightGreen = Color(0xFF4CAF50)
+val mediumBlue = Color(0xFF009688)
 
 val AlmostWhite01 = Color(0xFFF5F5F5)
 val AlmostWhite02 = Color(0xFFE4E4E4)
