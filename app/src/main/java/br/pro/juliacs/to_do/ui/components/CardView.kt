@@ -4,29 +4,31 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.pro.juliacs.to_do.data.TaskRequest
 import br.pro.juliacs.to_do.models.TaskData
 import br.pro.juliacs.to_do.ui.theme.*
 
 @Composable
-fun CardView(taskData: TaskData) {
-    val done = remember {
-        mutableStateOf(taskData.isDone)
+fun CardView(taskData: TaskData, taskRequest: TaskRequest?) {
+    var done by remember {
+        mutableStateOf(false)
     }
+    done = taskData.isDone
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp)
     ) {
-        Row( modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min) ) {
+        Row( modifier = Modifier
+            .height(intrinsicSize = IntrinsicSize.Min) ) {
             TaskUrgentFlag(
                 taskData)
             TaskInfo(
@@ -35,9 +37,18 @@ fun CardView(taskData: TaskData) {
                     .weight(1f)
                     .align(Alignment.CenterVertically))
             Checkbox(
-                checked = done.value,
-                onCheckedChange = { done.value = it },
-                Modifier.align(Alignment.CenterVertically).padding(end = 10.dp)
+                checked = done,
+                onCheckedChange = {
+                    done = !done
+                    taskData.isDone = done
+                    taskRequest?.updateTaskData(taskData)
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 10.dp),
+                colors = CheckboxDefaults.colors(
+                    checkedColor = lightGreen
+                )
             )
         }
     }
@@ -49,11 +60,12 @@ fun TaskUrgentFlag(taskData: TaskData, modifier: Modifier = Modifier) {
     Column (
         Modifier.padding(end = 2.dp)
     ) {
-        Box(Modifier
-            .align(Alignment.Start)
-            .width(15.dp)
-            .background(flagColor)
-            .fillMaxHeight())
+        Box(
+            Modifier
+                .align(Alignment.Start)
+                .width(15.dp)
+                .background(flagColor)
+                .fillMaxHeight())
     }
 
 }
@@ -80,6 +92,6 @@ fun PreviewTaskView() {
         false
     )
     ToDoAppTheme(darkTheme = false) {
-        CardView(task)
+        CardView(task, null)
     }
 }

@@ -17,9 +17,11 @@ class TaskRequest(context: Context) {
 
     companion object {
         private const val URL = "http://10.0.2.2:8000"
-        private const val GET_TASKS = "/tasks"
+        private const val GET_TASKS = "/tasks/"
         private const val CREATE_TASK = "/tasks/new"
+        private const val UPDATE_TASK = "/tasks/done"
     }
+
 
     fun startTasksRequest() {
         val handler = Handler(Looper.getMainLooper())
@@ -30,6 +32,44 @@ class TaskRequest(context: Context) {
             }
         })
     }
+
+
+    fun createNewTask(taskData: TaskData, callback: CallBack) {
+        Log.d("ReqCreateStatus", "Starting")
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST,
+            URL + CREATE_TASK,
+            this.taskToJSONObject(taskData),
+            { response ->
+                Log.d("ReqCreateRes", response.toString())
+                this.tasksRequest(callback)
+            },
+            { error ->
+                Log.e("ReqCreateError", "Connection error. ${error.toString()}")
+            }
+        )
+        this.queue.add(jsonObjectRequest)
+    }
+
+
+    fun updateTaskData(taskData: TaskData) {
+        Log.d("ReqUpdateStatus", "Starting")
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.PUT,
+            URL + UPDATE_TASK + "/${taskData.isDone}/${taskData.id}",
+            this.taskToJSONObject(taskData),
+            { response ->
+                Log.d("ReqUpdateRes", response.toString())
+                this.tasksRequest(null)
+            },
+            { error ->
+                Log.e("ReqUpdateError", "Connection error. ${error.toString()}")
+            }
+        )
+        this.queue.add(jsonObjectRequest)
+    }
+
 
     private fun tasksRequest(callback: CallBack?) {
         val jsonRequest = JsonArrayRequest(
@@ -48,6 +88,7 @@ class TaskRequest(context: Context) {
         this.queue.add(jsonRequest)
     }
 
+
     private fun jsonArrayToTaskList(jsonArray: JSONArray): ArrayList<TaskData> {
         val taskList = ArrayList<TaskData>()
 
@@ -64,22 +105,6 @@ class TaskRequest(context: Context) {
         return taskList
     }
 
-    fun createNewTask(taskData: TaskData, callback: CallBack) {
-        Log.d("ReqCreateStatus", "Starting")
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST,
-            URL + CREATE_TASK,
-            this.taskToJSONObject(taskData),
-            { response ->
-                Log.d("ReqCreateRes", response.toString())
-                this.tasksRequest(callback)
-            },
-            { error ->
-                Log.e("ReqCreateError", "Connection error. ${error.toString()}")
-            }
-        )
-        this.queue.add(jsonObjectRequest)
-    }
 
     private fun taskToJSONObject(taskData: TaskData): JSONObject {
         val jsonObject = JSONObject()

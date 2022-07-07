@@ -99,7 +99,7 @@ fun MainScreenView( taskRequest: TaskRequest ) {
             Column {
                 LazyColumn (state = stateTasksList) {
                     items(TasksSingleton.getTasks()) { task ->
-                        CardView(taskData = task)
+                        CardView(taskData = task, taskRequest = taskRequest)
                     }
                 }
             }
